@@ -273,9 +273,37 @@ def create_pie_chart(df_avg, target_brand):
             'avg_volume': [others_volume]
         })], ignore_index=True)
     
-    colors = ['#FF6B6B' if brand == target_brand else '#4ECDC4' for brand in df_top['brand']]
-    if len(colors) > 7:
-        colors[-1] = '#95a5a6'
+    # Color palette with distinct colors for each brand
+    color_palette = [
+        '#FF6B6B',  # Red - for target brand
+        '#4ECDC4',  # Teal
+        '#45B7D1',  # Sky Blue
+        '#96CEB4',  # Sage Green
+        '#FFEAA7',  # Yellow
+        '#DFE6E9',  # Light Gray
+        '#74B9FF',  # Light Blue
+        '#A29BFE',  # Purple
+        '#FD79A8',  # Pink
+        '#FDCB6E',  # Orange
+        '#6C5CE7',  # Deep Purple
+        '#00B894',  # Green
+        '#E17055',  # Coral
+        '#0984E3',  # Blue
+    ]
+    
+    # Assign colors to brands
+    colors = []
+    non_target_index = 0
+    for i, brand in enumerate(df_top['brand']):
+        if brand == target_brand:
+            colors.append('#FF6B6B')  # Always red for target brand
+        elif brand == 'Others':
+            colors.append('#95a5a6')  # Gray for Others
+        else:
+            # Use different colors from palette for each brand
+            color_index = (non_target_index + 1) % len(color_palette)
+            colors.append(color_palette[color_index])
+            non_target_index += 1
     
     fig = go.Figure(go.Pie(
         labels=df_top['brand'],
